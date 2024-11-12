@@ -10,31 +10,26 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest  # Using an Ubuntu runner
+    runs-on: ubuntu-latest  # Use Ubuntu runner
 
     steps:
       # Step 1: Checkout the code from the repository
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Install Miniconda (a lightweight version of Conda)
-      - name: Set up Conda
-        uses: conda-incubator/setup-miniconda@v2
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          miniconda-version: 'latest'
-          auto-activate-base: false  # We don't want to auto-activate the base environment
+          python-version: '3.10'  # Specify your Python version
 
-      # Step 3: Create Conda environment from environment.yml
-      - name: Create Conda environment
+      # Step 3: Install dependencies from requirements.txt
+      - name: Install dependencies
         run: |
-          conda env create -f environment.yml  # Create environment from environment.yml
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      # Step 4: Install dependencies (if needed via pip, after Conda environment setup)
-      - name: Install pip dependencies
-        run: |
-          conda run -n sports_sponsor_recommendation pip install -r requirements.txt
-
-      # Step 5: Run tests using pytest within the Conda environment
+      # Step 4: Run tests using pytest
       - name: Run tests
         run: |
-          conda run -n sports_sponsor_recommendation pytest --maxfail=1 --disable-warnings -q
+          pytest --maxfail=1 --disable-warnings -q
