@@ -1,0 +1,145 @@
+from pymongo import MongoClient
+from gensim.models import KeyedVectors
+
+class SponsorRecommender:
+
+    def __init__(self, mongo_uri, mongo_db, collection_name, athlete_collection, w2v_model_path):
+        print("Initializing Sponsor Recommender...")
+
+        # Initialize MongoDB client and load Word2Vec model
+        self.client = MongoClient(mongo_uri)
+        self.db = self.client[mongo_db]
+        self.sponsor_collection = self.db[collection_name]
+        if isinstance(athlete_collection, str):
+            self.athlete_collection = self.db[athlete_collection]
+        else:
+            self.athlete_collection = athlete_collection
+        
+        print("Loading Word2Vec model...")
+        self.word2vec_model = KeyedVectors.load_word2vec_format(w2v_model_path, binary=True)
+        print("Word2Vec model loaded successfully.")
+
+    def close(self):
+        print("Closing database connection.")
+        self.client.close()
+
+    def calculate_similarity_score(self, user_words, sponsor_words):
+        total_score = 0.0
+        top_matches = []
+        
+        for user_word in user_words:
+            max_similarity = 0.0
+            best_match = None
+            for sponsor_word, weight in sponsor_words:
+                if user_word in self.word2vec_model and sponsor_word in self.word2vec_model:
+                    # Check if word2vec_model is a mock dictionary or an actual Word2Vec model
+                    if isinstance(self.word2vec_model, dict):
+                        # Use dictionary lookup for mock model
+                        similarity = self.word2vec_model[user_word].get(sponsor_word, 0)
+                    else:
+                        # Use similarity method for Word2Vec model
+                        similarity = self.word2vec_model.similarity(user_word, sponsor_word)
+                    
+                    weighted_similarity = similarity * weight
+                    if weighted_similarity > max_similarity:
+                        max_similarity = weighted_similarity
+                        best_match = sponsor_word
+            if best_match:
+                top_matches.append((user_word, best_match, max_similarity))
+            total_score += max_similarity
+
+        return total_score, top_matches
+
+    def get_similar_athletes(self, sponsor_name):
+        # Retrieve athletes with the specified sponsor
+        athletes = list(self.athlete_collection.find({"Sports Sponsors": sponsor_name}, {"Athlete Name": 1}))
+        return [athlete["Athlete Name"] for athlete in athletes]
+
+    def recommend_sponsors(self, input_nouns, input_adjectives, input_values, input_nationality, input_target_audience):
+        recommendations = {}
+        top_word_matches = {}
+
+        print("Fetching sponsor data from the database...")
+        sponsor_data = self.sponsor_collection.find()
+        print("Sponsor data fetched. Processing each sponsor...")
+
+        for idx, sponsor in enumerate(sponsor_data, start=1):
+            sponsor_name = sponsor["Sponsor"]
+            print(f"Processing sponsor {idx}: {sponsor_name}")
+            sponsor_chemistry = 0.0
+
+            # Calculate scores and top words for each attribute
+            score, nouns_matches = self.calculate_similarity_score(input_nouns, sponsor.get("Nouns", []))
+            sponsor_chemistry += score
+            score, adjectives_matches = self.calculate_similarity_score(input_adjectives, sponsor.get("Adjectives", []))
+            sponsor_chemistry += score
+            score, values_matches = self.calculate_similarity_score(input_values, sponsor.get("Values", []))
+            sponsor_chemistry += score
+            score, nationality_matches = self.calculate_similarity_score([input_nationality], sponsor.get("Nationalities", []))
+            sponsor_chemistry += score
+            score, audience_matches = self.calculate_similarity_score([input_target_audience], sponsor.get("Target Audiences", []))
+            sponsor_chemistry += score
+
+            # Store results
+            recommendations[sponsor_name] = sponsor_chemistry
+            top_word_matches[sponsor_name] = {
+                "Nouns": nouns_matches,
+                "Adjectives": adjectives_matches,
+                "Values": values_matches,
+                "Nationality": nationality_matches,
+                "Target Audience": audience_matches
+            }
+
+            # print(f"Total score for {sponsor_name}: {sponsor_chemistry:.2f}")
+
+        print("Sorting sponsors by scores to get the top recommendations...")
+        top_sponsors = sorted(recommendations.items(), key=lambda x: x[1], reverse=True)[:3]
+        print("Recommendation process complete.\n")
+
+        results = []
+        for sponsor_name, score in top_sponsors:
+            # Retrieve similar athletes for each top sponsor
+            similar_athletes = self.get_similar_athletes(sponsor_name)
+            results.append({
+                "Sponsor": sponsor_name,
+                "Score": score,
+                "Top Matches": top_word_matches[sponsor_name],
+                "Similar Athletes": similar_athletes[:3]
+            })
+
+        return results
+
+# Example usage
+if __name__ == "__main__":
+    mongo_uri = "mongodb://localhost:27017/"
+    mongo_db = "athlete_sponsorships"
+    sponsor_collection = "sponsor_identity"
+    athlete_collection = "athletes"
+    w2v_model_path = "C:/Users/Victor Cardenas/Documents/msc/semestre-3/bases_datos/python/word2vec/GoogleNews-vectors-negative300.bin"
+
+    recommender = SponsorRecommender(mongo_uri, mongo_db, sponsor_collection, athlete_collection, w2v_model_path)
+
+    try:
+        # Simulated user input
+        nouns = ["MMA","UFC","Heavyweight"]
+        adjectives = ["Power","Endurance","Resilience"]
+        values = ["Dominant","Inspirational","Ferocious"]
+        nationality = "italian"
+        target_audience = "men"
+
+        print("Starting sponsor recommendation process...")
+        recommendations = recommender.recommend_sponsors(nouns, adjectives, values, nationality, target_audience)
+
+        print("\nTop 3 Sponsor Recommendations:")
+        for rec in recommendations:
+            print(f"Sponsor: {rec['Sponsor']}, Score: {rec['Score']:.2f}")
+            print("Top Matches:")
+            for category, matches in rec["Top Matches"].items():
+                top_words = ", ".join([f"{user_word} with {word} ({similarity:.2f})" for user_word, word, similarity in matches])
+                print(f"  {category}: {top_words}")
+            print("Similar Athletes Sponsored:")
+            print(", ".join(rec["Similar Athletes"]) if rec["Similar Athletes"] else "None found")
+            print("\n" + "-"*40 + "\n")
+
+    finally:
+        recommender.close()
