@@ -3,7 +3,7 @@ name: Python CI
 on:
   push:
     branches:
-      - main
+      - main # Comment to make sure
   pull_request:
     branches:
       - main
