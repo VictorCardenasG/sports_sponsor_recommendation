@@ -1,6 +1,6 @@
 import mongomock
 import pytest
-from sdb_sponsor_recommendation import SponsorRecommender  # Replace with your actual module name
+from sdb_sponsor_recommendation import SponsorRecommender  
 
 @pytest.fixture
 def mock_db():
@@ -36,7 +36,7 @@ def test_calculate_similarity_score(mock_db):
         mongo_uri="mongodb://localhost",  # Use a valid URI for mongomock
         mongo_db="athlete_sponsorships",
         collection_name="sponsor_identity",
-        w2v_model_path = "C:/Users/Victor Cardenas/Documents/msc/semestre-3/bases_datos/python/word2vec/GoogleNews-vectors-negative300.bin"
+        w2v_model_path = "C:/Users/Victor Cardenas/Documents/msc/semestre-3/bases_datos/python/word2vec/GoogleNews-vectors-negative300.bin",
         athlete_collection=mock_db  # Pass the mocked collection here
     )
     
@@ -58,7 +58,7 @@ def test_recommend_sponsors(mock_db):
         mongo_uri="mongodb://localhost:27017/",  # This should be acceptable for mongomock
         mongo_db="athlete_sponsorships",
         collection_name="sponsor_identity",
-        w2v_model_path = "C:/Users/Victor Cardenas/Documents/msc/semestre-3/bases_datos/python/word2vec/GoogleNews-vectors-negative300.bin"
+        w2v_model_path = "C:/Users/Victor Cardenas/Documents/msc/semestre-3/bases_datos/python/word2vec/GoogleNews-vectors-negative300.bin",
         athlete_collection=mock_db  # Pass the mocked collection here
     )
     
