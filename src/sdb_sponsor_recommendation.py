@@ -26,12 +26,12 @@ class SponsorRecommender:
     def calculate_similarity_score(self, user_words, sponsor_words):
         total_score = 0.0
         top_matches = []
-        
+        matched_words = set()
         for user_word in user_words:
             max_similarity = 0.0
             best_match = None
             for sponsor_word, weight in sponsor_words:
-                if user_word in self.word2vec_model and sponsor_word in self.word2vec_model:
+                if user_word in self.word2vec_model and sponsor_word in self.word2vec_model and sponsor_word not in matched_words:
                     # Check if word2vec_model is a mock dictionary or an actual Word2Vec model
                     if isinstance(self.word2vec_model, dict):
                         # Use dictionary lookup for mock model
@@ -44,6 +44,7 @@ class SponsorRecommender:
                     if weighted_similarity > max_similarity:
                         max_similarity = weighted_similarity
                         best_match = sponsor_word
+                        matched_words.add(sponsor_word)
             if best_match:
                 top_matches.append((user_word, best_match, max_similarity))
             total_score += max_similarity
@@ -135,7 +136,7 @@ if __name__ == "__main__":
             print(f"Sponsor: {rec['Sponsor']}, Score: {rec['Score']:.2f}")
             print("Top Matches:")
             for category, matches in rec["Top Matches"].items():
-                top_words = ", ".join([f"{user_word} with {word} ({similarity:.2f})" for user_word, word, similarity in matches])
+                top_words = ", ".join([f"User input: {user_word} with DB entry: {word} ({similarity:.2f})" for user_word, word, similarity in matches])
                 print(f"  {category}: {top_words}")
             print("Similar Athletes Sponsored:")
             print(", ".join(rec["Similar Athletes"]) if rec["Similar Athletes"] else "None found")
