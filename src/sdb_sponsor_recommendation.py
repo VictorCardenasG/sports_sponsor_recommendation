@@ -1,3 +1,4 @@
+
 from pymongo import MongoClient
 from gensim.models import KeyedVectors
 
@@ -51,10 +52,73 @@ class SponsorRecommender:
 
         return total_score, top_matches
 
-    def get_similar_athletes(self, sponsor_name):
+    def calculate_similarity_athlete(self, user_words, sponsor_words):
+        print('Athlete similarity trying')
+        total_score = 0.0
+        top_matches = []
+        matched_words = set()
+        for user_word in user_words:
+            max_similarity = 0.0
+            best_match = None
+            for sponsor_word in sponsor_words:
+                if user_word in self.word2vec_model and sponsor_word in self.word2vec_model and sponsor_word not in matched_words:
+                    # Check if word2vec_model is a mock dictionary or an actual Word2Vec model
+                    if isinstance(self.word2vec_model, dict):
+                        # Use dictionary lookup for mock model
+                        similarity = self.word2vec_model[user_word].get(sponsor_word, 0)
+                    else:
+                        # Use similarity method for Word2Vec model
+                        similarity = self.word2vec_model.similarity(user_word, sponsor_word)
+                    
+                    
+                    if similarity > max_similarity:
+                        max_similarity = similarity
+                        best_match = sponsor_word
+                        matched_words.add(sponsor_word)
+            if best_match:
+                top_matches.append((user_word, best_match, max_similarity))
+            total_score += max_similarity
+
+        return total_score, top_matches
+
+    def get_similar_athletes_2(self, sponsor_name):
         # Retrieve athletes with the specified sponsor
         athletes = list(self.athlete_collection.find({"Sports Sponsors": sponsor_name}, {"Athlete Name": 1}))
         return [athlete["Athlete Name"] for athlete in athletes]
+
+    def get_similar_athletes(self, sponsor_name, input_nouns, input_adjectives, input_values, input_nationality, input_target_audience):
+        # Retrieve athletes sponsored by the given sponsor
+        athletes = list(self.athlete_collection.find({"Sports Sponsors": sponsor_name}))
+
+        athlete_scores = []
+
+        # Iterate over each athlete and calculate similarity
+        for athlete in athletes:
+            athlete_name = athlete["Athlete Name"]
+            athlete_nouns = athlete.get("Nouns", [])
+            athlete_adjectives = athlete.get("Adjectives", [])
+            athlete_values = athlete.get("Values", [])
+            athlete_nationality = athlete.get("Nationality", "")
+            athlete_target_audience = athlete.get("Core Audience", "")
+
+            # Calculate similarity scores for each attribute
+            score, _ = self.calculate_similarity_athlete(input_nouns, athlete_nouns)
+            score += self.calculate_similarity_athlete(input_adjectives, athlete_adjectives)[0]
+            score += self.calculate_similarity_athlete(input_values, athlete_values)[0]
+            score += self.calculate_similarity_athlete([input_nationality], [athlete_nationality])[0]
+            score += self.calculate_similarity_athlete([input_target_audience], [athlete_target_audience])[0]
+
+            # Store the score and athlete name
+            athlete_scores.append((athlete_name, score))
+
+        # Sort athletes by similarity score in descending order
+        athlete_scores.sort(key=lambda x: x[1], reverse=True)
+
+        # Return top 3 athletes
+        top_athletes = [athlete for athlete, _ in athlete_scores[:3]]
+        return top_athletes
+
+
 
     def recommend_sponsors(self, input_nouns, input_adjectives, input_values, input_nationality, input_target_audience):
         recommendations = {}
@@ -100,7 +164,7 @@ class SponsorRecommender:
         results = []
         for sponsor_name, score in top_sponsors:
             # Retrieve similar athletes for each top sponsor
-            similar_athletes = self.get_similar_athletes(sponsor_name)
+            similar_athletes = self.get_similar_athletes(sponsor_name, input_nouns, input_adjectives, input_values, input_nationality, input_target_audience)
             results.append({
                 "Sponsor": sponsor_name,
                 "Score": score,
@@ -109,6 +173,9 @@ class SponsorRecommender:
             })
 
         return results
+
+
+
 
 # Example usage
 if __name__ == "__main__":
@@ -144,3 +211,4 @@ if __name__ == "__main__":
 
     finally:
         recommender.close()
+
