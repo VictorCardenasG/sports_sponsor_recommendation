@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlete Search Results</title>
+    <style>
+        body { background-color: #333; color: white; font-family: Arial, sans-serif; }
+        .container { width: 80%; margin: 0 auto; padding: 2rem; }
+        h1 { text-align: center; }
+        .athlete-details { margin-top: 2rem; }
+        .athlete-details p { margin: 0.5rem 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Athlete Search Results</h1>
+        {% if result == "Athlete not found!" %}
+            <p>{{ result }}</p>
+        {% else %}
+            <div class="athlete-details">
+                <p><strong>Athlete Name:</strong> {{ result.athlete_name }}</p>
+                <p><strong>Values:</strong> {{ result.values }}</p>
+                <p><strong>Nouns:</strong> {{ result.nouns }}</p>
+                <p><strong>Adjectives:</strong> {{ result.adjectives }}</p>
+                <p><strong>Sponsor:</strong> {{ result.sponsor }}</p>
+                <p><strong>IG Followers:</strong> {{ result.ig_followers }}</p>
+                <p><strong>Practiced Sport:</strong> {{ result.practiced_sport }}</p>
+                <p><strong>Nationality:</strong> {{ result.nationality }}</p>
+                <p><strong>Core Audience:</strong> {{ result.core_audience }}</p>
+                <p><strong>Net Worth:</strong> {{ result.net_worth }}</p>
+                <p><strong>Age:</strong> {{ result.age }}</p>
+                <p><strong>Agent:</strong> {{ result.agent }}</p>
+                <p><strong>Sports Sponsors:</strong> {{ result.sports_sponsors }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

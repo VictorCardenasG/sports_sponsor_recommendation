@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Values Popularity</title>
+    <style>
+        body { background-color: #333; color: white; font-family: Arial, sans-serif; text-align: center; }
+        .container { margin: 5% auto; width: 50%; }
+        input[type=text], button {
+            padding: 1rem;
+            margin: 1rem 0;
+            width: 100%;
+        }
+        button { background-color: #444; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Check Value Popularity</h1>
+        <form method="POST">
+            <label for="value">Enter a Value:</label>
+            <input type="text" id="value" name="value" placeholder="e.g., Confidence" required>
+            <button type="submit">Get Count</button>
+        </form>
+
+        {% if value is not none %}
+        <div>
+            <h2>Results</h2>
+            <p>The value "<strong>{{ value }}</strong>" appears <strong>{{ count }}</strong> time(s).</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

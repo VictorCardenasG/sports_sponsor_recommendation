@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlete Search</title>
+    <style>
+        body { background-color: #333; color: white; font-family: Arial, sans-serif; }
+        .form-container { width: 50%; margin: 0 auto; padding: 2rem; }
+        input[type="text"] { width: 100%; padding: 1rem; margin: 0.5rem 0; }
+        button { padding: 1rem; background-color: #444; color: white; border: none; }
+        #suggestions { margin-top: 10px; background-color: #444; color: white; padding: 10px; border-radius: 5px; }
+        #suggestions div { padding: 5px; cursor: pointer; }
+        #suggestions div:hover { background-color: #666; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Search for an Athlete</h1>
+        <form action="/explore-data/athlete-search" method="POST">
+            <label for="athlete_name">Athlete Name:</label>
+            <input type="text" id="athlete_name" name="athlete_name" onkeyup="getSuggestions(this.value)" required>
+            <div id="suggestions"></div>  <!-- Div for suggestions -->
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Include the JS file -->
+    <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
+</body>
+</html>

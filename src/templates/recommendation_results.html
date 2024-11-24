@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsor Recommendations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 50px;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #222;
+            margin: 15px auto;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 600px;
+            text-align: left;
+        }
+
+        li strong {
+            color: #f5a623;
+        }
+
+        a {
+            color: #f5a623;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recommended Sponsors</h1>
+
+    <!-- Check if recommendations are available -->
+    {% if recommendations %}
+        <ul>
+        {% for recommendation in recommendations %}
+            <li>
+                <strong>Sponsor:</strong> {{ recommendation['Sponsor'] }} <br>
+                <strong>Score:</strong> {{ recommendation['Score'] }} <br>
+                <strong>Top Matches:</strong> {{ recommendation['Top Matches'] }} <br>
+                <strong>Similar Athletes:</strong> {{ recommendation['Similar Athletes'] }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recommendations found. Please try again with different values.</p>
+    {% endif %}
+
+    <!-- Link back to the form to try again -->
+    <br>
+    <a href="/sponsor_recommendation">Go back to the recommendation form</a>
+</body>
+</html>

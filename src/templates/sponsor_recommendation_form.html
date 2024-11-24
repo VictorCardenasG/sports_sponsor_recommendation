@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsor Recommendation Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 50px;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        form {
+            margin: 20px auto;
+            width: 70%;
+            max-width: 500px;
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        label {
+            display: block;
+            font-size: 1.2rem;
+            margin: 10px 0 5px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #f5a623;
+            color: black;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #fff;
+            color: black;
+        }
+
+        .back-link {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+
+        .back-link a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .back-link a:hover {
+            color: #f5a623;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sponsor Recommendation Form</h1>
+
+    <!-- Form to collect user input for sponsor recommendation -->
+    <form action="/recommend_sponsors" method="post">
+        <label for="nouns">Enter nouns (comma separated):</label>
+        <input type="text" name="nouns" id="nouns" placeholder="e.g., athlete, sponsor, product" required />
+
+        <label for="adjectives">Enter adjectives (comma separated):</label>
+        <input type="text" name="adjectives" id="adjectives" placeholder="e.g., strong, popular, global" required />
+
+        <label for="values">Enter values (comma separated):</label>
+        <input type="text" name="values" id="values" placeholder="e.g., integrity, excellence, innovation" required />
+
+        <label for="nationality">Enter nationality:</label>
+        <input type="text" name="nationality" id="nationality" placeholder="e.g., USA, UK, Brazil" required />
+
+        <label for="target_audience">Enter target audience:</label>
+        <input type="text" name="target_audience" id="target_audience" placeholder="e.g., youth, professionals, families" required />
+
+        <input type="submit" value="Get Recommendations" />
+    </form>
+
+    <div class="back-link">
+        <a href="/">Back to Home</a>
+    </div>
+</body>
+</html>

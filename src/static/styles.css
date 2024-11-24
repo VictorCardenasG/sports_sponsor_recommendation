@@ -1,0 +1,525 @@
+/* Global styles */
+@font-face {
+    font-family: 'Scto Grotesk A';
+    src: url('../fonts/SctoGroteskA-Regular.woff2') format('woff2'),
+         url('../fonts/SctoGroteskA-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Newake-Font-Demo';
+    src: url('../fonts/Newake-Font-Demo.woff2') format('woff2'),
+         url('../fonts/Newake-Font-Demo.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Nohemi-Light';
+    src: url('../fonts/Nohemi-Light.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Nohemi-Bold';
+    src: url('../fonts/Nohemi-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+html, body {
+    font-family: 'Scto Grotesk A', sans-serif;
+    background-color: #000000; /* Dark background */
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    cursor: none;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Custom cursor */
+.custom-cursor {
+    width: 15px;
+    height: 15px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease-out;
+    z-index: 9999;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Change cursor on hover */
+a:hover, button:hover {
+    cursor: none; /* Disable default cursor on hover */
+}
+
+* {
+    cursor: none; /* Disable default cursor for all elements */
+}
+
+/* First row */
+header {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 96%;
+    padding: 10px 20px;
+    background-color: transparent; /* Match background color */
+    z-index: 1000; /* Ensure header stays above other content */
+    top: 15px;
+}
+
+.logo img {
+    height: 60px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+nav ul li a:hover {
+    background-color: #444;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* Welcome Section */
+.welcome-section {
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: -50px;
+    background-image: url('background');
+    background-size: cover;
+    background-position: center;
+}
+
+.welcome-section h1 {
+    font-family: 'Newake-Font-Demo', sans-serif;
+    font-size: 80px;
+    letter-spacing: 10px;
+    margin: 10px;
+}
+
+#typing-text {
+    font-family: 'Scto Grotesk A', sans-serif;
+    font-size: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 0.15em solid white;
+    animation: typing 20s steps(160, end) infinite, blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    0%, 100% { width: 0; }
+    10%, 90% { width: 100%; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: white; }
+}
+
+.button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: 2px solid #fff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.button:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Projects Section */
+.projects-section {
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+}
+
+.project-item {
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.project-item:hover {
+    transform: scale(1.05);
+}
+
+/* Projects button */
+nav ul li:nth-child(2) a {
+    border: 1px solid white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav ul li:nth-child(2) a:hover {
+    background-color: white;
+    color: black;
+}
+
+/* About and CV buttons */
+nav ul li:nth-child(1) a,
+nav ul li:nth-child(3) a {
+    text-decoration: none;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+nav ul li:nth-child(1) a:hover,
+nav ul li:nth-child(3) a:hover {
+    background-color: #444;
+}
+
+/* Project Page Content */
+.project-content {
+    text-align: left;
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.project-content h1 {
+    font-family: 'Scto Grotesk A', sans-serif;
+    color: #f7f4f9;
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.project-content h2 {
+    font-family: 'Scto Grotesk A', sans-serif;
+    color: #ede3ee;
+    font-size: 30px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+.project-content p {
+    font-family: 'Scto Grotesk A', sans-serif;
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.project-content .project-image {
+    width: 100%;
+    height: auto;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    border: 0px solid #b37dc0;
+    box-shadow: 0px 0px 0px #c9a1cf;
+}
+
+.highlight {
+    background-color: yellow;
+    text-decoration: none;
+    color: black;
+    border-radius: 5px;
+    padding: 0 5px;
+}
+
+.highlight:hover {
+    background-color: #ECEFF4;
+    border-radius: 5px;
+}
+
+pre {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'Comfortaa', monospace;
+    overflow-x: auto;
+}
+
+code {
+    font-family: 'Comfortaa', monospace;
+    color: #333;
+}
+
+/* Ensure images are responsive */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Code snippet styling */
+.code-snippet {
+    max-height: 300px; /* Set a fixed max-height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    margin-bottom: 20px; /* Optional: Add some space */
+    position: relative; /* Optional: Ensure correct positioning */
+}
+
+/* Expandable code snippet */
+.code-snippet.expanded {
+    max-height: none; /* Expand to full height */
+    overflow-y: visible; /* Disable vertical scrolling */
+}
+
+/* Adjustments for link and paragraph */
+.project-content p {
+    margin-bottom: 10px; /* Reduce the gap between paragraphs */
+}
+
+.project-content a#expand-code {
+    color: #f0ad4e; /* Custom color for link */
+    text-decoration: underline; /* Add underline to link */
+    cursor: pointer; /* Use pointer cursor for link */
+}
+
+/* Custom list styles for audio features */
+.audio-features-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.audio-features-list li {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #ECEFF4;  /* Change this to your desired background color */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #333;  /* Change this to your desired text color */
+}
+
+.audio-features-list h3 {
+    font-size: 16px;
+    margin-top: 0;
+    color: #000;  /* Change this to your desired heading color */
+}
+
+.audio-features-list p {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;  /* Change this to your desired paragraph text color */
+}
+
+.audio-features-list strong {
+    font-weight: bold;
+    color: #000;  /* Change this to your desired strong text color */
+}
+
+
+/* Custom list */
+.regular-list {
+    list-style: none;
+    padding: 0;
+    position: relative; /* Ensure relative positioning for bullet positioning */
+}
+
+.regular-list li {
+    margin-bottom: 0px;
+    padding: 10px;
+    position: relative; /* Ensure relative positioning for bullet positioning */
+}
+
+.regular-list h3 {
+    background-color: #000; /* Grey background color */
+    color: #fff; /* White text color */
+    padding: 0px; /* Padding inside the box */
+    border-radius: 5px; /* Rounded corners */
+    border: 0px solid #fff;
+    display: inline-block; /* Ensures the background wraps only around the text */
+    font-weight: bold;
+    font-size: 18px; /* Adjust as needed */
+    letter-spacing: 0px; /* Adjust letter spacing as needed */
+    margin: 0px 0; /* Add margin around the box */
+    position: relative; /* Ensure relative positioning for bullet positioning */
+}
+
+.regular-list h3::before {
+    content: '•'; /* Solid circle bullet */
+    color: #fff; /* White color */
+    font-size: 18px; /* Adjust as needed */
+    position: absolute;
+    left: -25px; /* Adjust position to your preference */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.regular-list p {
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #fff;  /* Change this to your desired paragraph text color */
+}
+
+.regular-list strong {
+    font-weight: bold;
+    color: #fff;  /* Change this to your desired strong text color */
+}
+
+/* Pipeline Diagram Styles */
+.pipeline-section {
+    text-align: center;
+    padding: 20px;
+}
+
+.pipeline-diagram {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.stage {
+    margin-top: 20px;
+    background-color: transparent;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    border: 2px solid white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.stage:hover {
+    background-color: white;
+    color: black;
+}
+
+.stage:active {
+    background-color: white;
+    color: black;
+}
+
+.data-table {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #333634;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #333634;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* six columns */
+    grid-template-rows: repeat(4, 1fr); /* Four rows */
+    gap: 10px; /* Space between images */
+    max-width: 1200px; /* Adjust the width as needed */
+    margin: 10px auto; /* Center the grid horizontally and add vertical margin */
+}
+
+.grid-item img {
+    width: 100%; /* Make the image fill the grid item */
+    height: 100%; /* Make the image fill the grid item */
+    border-radius: 8px; /* Adjust this value for rounded corners */
+    object-fit: cover; /* Ensure the image covers the area without distortion */
+    display: block;
+}
+
+/* Ensures that the content takes up the full height of the page if not enough content */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    min-height: calc(100vh - 100px); /* Adjust '100px' to match the height of your footer */
+    padding-bottom: 20px; /* Space at the bottom before the footer appears */
+}
+
+.footer {
+    background-color: #333;
+    padding: 10px 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+    margin-top: auto;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-left, .footer-center, .footer-right {
+    flex: 1;
+}
+
+.footer-left {
+    text-align: left;
+}
+
+.footer-center {
+    text-align: center;
+}
+
+.footer-right {
+    text-align: right;
+}
+

@@ -2,29 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Recommendations</title>
+    <title>Sponsor Recommender</title>
     <style>
         body { background-color: #333; color: white; font-family: Arial, sans-serif; }
-        .results-container { width: 50%; margin: 0 auto; padding: 2rem; }
-        h1 { color: #00b4d8; }
-        .recommendation { border-bottom: 1px solid #444; padding: 1rem 0; }
+        .form-container { width: 50%; margin: 0 auto; padding: 2rem; }
+        input[type=text], select, textarea { width: 100%; padding: 1rem; margin: 0.5rem 0; }
+        button { padding: 1rem; background-color: #444; color: white; border: none; }
     </style>
 </head>
 <body>
-    <div class="results-container">
-        <h1>Top Sponsor Recommendations</h1>
-        {% for rec in recommendations %}
-            <div class="recommendation">
-                <h2>Sponsor: {{ rec['Sponsor'] }}</h2>
-                <p>Score: {{ rec['Score'] }}</p>
-                <h3>Top Matches:</h3>
-                {% for category, matches in rec['Top Matches'].items() %}
-                    <p><strong>{{ category }}:</strong> {{ matches }}</p>
-                {% endfor %}
-                <h3>Similar Athletes Sponsored:</h3>
-                <p>{{ rec['Similar Athletes'] }}</p>
-            </div>
-        {% endfor %}
+    <div class="form-container">
+        <h1>Enter Your Preferences</h1>
+        <form action="/recommend" method="post">
+            <label for="nouns">Nouns (comma-separated):</label>
+            <input type="text" id="nouns" name="nouns">
+            <label for="adjectives">Adjectives (comma-separated):</label>
+            <input type="text" id="adjectives" name="adjectives">
+            <label for="values">Values (comma-separated):</label>
+            <input type="text" id="values" name="values">
+            <label for="nationality">Nationality:</label>
+            <input type="text" id="nationality" name="nationality">
+            <label for="target_audience">Target Audience:</label>
+            <input type="text" id="target_audience" name="target_audience">
+            <button type="submit">Get Recommendations</button>
+        </form>
     </div>
 </body>
 </html>
