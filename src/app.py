@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 
-# SloganRecommender class (same as you provided)
+# SloganRecommender class
 class SloganRecommender:
 
     def __init__(self, mongo_uri, mongo_db, collection_name, athlete_collection):
@@ -25,7 +25,7 @@ class SloganRecommender:
         try:
             results = self.sponsor_collection.find(
                 {"$text": {"$search": user_input}},
-                {"Sponsor": 1, "score": {"$meta": "textScore"}}
+                {"Sponsor": 1, "Slogan": 1, "score": {"$meta": "textScore"}}
             ).sort([("score", {"$meta": "textScore"})])
 
             seen_sponsors = set()
@@ -33,7 +33,12 @@ class SloganRecommender:
 
             for result in results:
                 if result["Sponsor"] not in seen_sponsors:
-                    deduplicated_results.append(result)
+                    # Add the result with Sponsor, Slogan, and Score
+                    deduplicated_results.append({
+                        'Sponsor': result['Sponsor'],
+                        'Slogan': result.get('Slogan', 'No slogan available'),  # Use 'No slogan available' if Slogan is missing
+                        'Score': round(result['score'], 2)
+                    })
                     seen_sponsors.add(result["Sponsor"])
 
                 if len(deduplicated_results) >= 3:  # Limit to top 3
@@ -44,6 +49,7 @@ class SloganRecommender:
         except ConnectionFailure:
             print("Failed to connect to MongoDB")
             return []
+
 
 # Initialize SloganRecommender
 slogan_recommender = SloganRecommender(

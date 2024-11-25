@@ -53,7 +53,6 @@ class SponsorRecommender:
         return total_score, top_matches
 
     def calculate_similarity_athlete(self, user_words, sponsor_words):
-        print('Athlete similarity trying')
         total_score = 0.0
         top_matches = []
         matched_words = set()
@@ -91,10 +90,15 @@ class SponsorRecommender:
         athletes = list(self.athlete_collection.find({"Sports Sponsors": sponsor_name}))
 
         athlete_scores = []
+        athletes_reviewed = set()
 
         # Iterate over each athlete and calculate similarity
         for athlete in athletes:
             athlete_name = athlete["Athlete Name"]
+            if athlete_name in athletes_reviewed:
+                continue
+            else:
+                athletes_reviewed.add(athlete_name)
             athlete_nouns = athlete.get("Nouns", [])
             athlete_adjectives = athlete.get("Adjectives", [])
             athlete_values = athlete.get("Values", [])
@@ -127,9 +131,20 @@ class SponsorRecommender:
         print("Fetching sponsor data from the database...")
         sponsor_data = self.sponsor_collection.find()
         print("Sponsor data fetched. Processing each sponsor...")
-
+        sponsors_reviewed = set()
         for idx, sponsor in enumerate(sponsor_data, start=1):
+
             sponsor_name = sponsor["Sponsor"]
+            
+            # Skip sponsors with name '-1' or empty string
+            if sponsor_name == "-1" or not sponsor_name:
+                print(f"Skipping sponsor {idx}: {sponsor_name} (invalid name)")
+                continue
+            if sponsor_name in sponsors_reviewed:
+                continue
+            else:
+                sponsors_reviewed.add(sponsor_name)
+
             print(f"Processing sponsor {idx}: {sponsor_name}")
             sponsor_chemistry = 0.0
 
@@ -155,7 +170,7 @@ class SponsorRecommender:
                 "Target Audience": audience_matches
             }
 
-            # print(f"Total score for {sponsor_name}: {sponsor_chemistry:.2f}")
+            print(f"Total score for {sponsor_name}: {sponsor_chemistry:.2f}")
 
         print("Sorting sponsors by scores to get the top recommendations...")
         top_sponsors = sorted(recommendations.items(), key=lambda x: x[1], reverse=True)[:3]
@@ -189,7 +204,7 @@ if __name__ == "__main__":
 
     try:
         # Simulated user input
-        nouns = ["MMA","UFC","Heavyweight"]
+        nouns = ["Soccer","Striker","Icon"]
         adjectives = ["Power","Endurance","Resilience"]
         values = ["Dominant","Inspirational","Ferocious"]
         nationality = "italian"
