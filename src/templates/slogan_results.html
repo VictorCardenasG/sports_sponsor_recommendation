@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slogan Results</title>
+    <style>
+        body { background-color: #333; color: white; font-family: Arial, sans-serif; }
+        .container { width: 80%; margin: 0 auto; padding: 2rem; }
+        h1 { text-align: center; }
+        .results { margin-top: 2rem; }
+        .result { background-color: #444; padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Top 3 Similar Slogans</h1>
+        <div class="results">
+            {% for result in results %}
+            <div class="result">
+                <h2>{{ result['Sponsor'] }}</h2>
+                <p>Score: {{ result['score'] }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="back-link">
+            <a href="/explore-data/slogan-similarity">Back to Search</a>
+        </div>
+    </div>
+</body>
+</html>

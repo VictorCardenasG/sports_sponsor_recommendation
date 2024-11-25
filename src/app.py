@@ -1,8 +1,68 @@
 from flask import Flask, render_template, request, jsonify
 from cassandra.cluster import Cluster
 from sdb_sponsor_recommendation import SponsorRecommender
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
 
 app = Flask(__name__)
+
+
+
+# SloganRecommender class (same as you provided)
+class SloganRecommender:
+
+    def __init__(self, mongo_uri, mongo_db, collection_name, athlete_collection):
+        print("Initializing Sponsor Recommender...")
+        self.client = MongoClient(mongo_uri)
+        self.db = self.client[mongo_db]
+        self.sponsor_collection = self.db[collection_name]
+        if isinstance(athlete_collection, str):
+            self.athlete_collection = self.db[athlete_collection]
+        else:
+            self.athlete_collection = athlete_collection
+
+    def find_most_similar_slogans(self, user_input):
+        try:
+            results = self.sponsor_collection.find(
+                {"$text": {"$search": user_input}},
+                {"Sponsor": 1, "score": {"$meta": "textScore"}}
+            ).sort([("score", {"$meta": "textScore"})])
+
+            seen_sponsors = set()
+            deduplicated_results = []
+
+            for result in results:
+                if result["Sponsor"] not in seen_sponsors:
+                    deduplicated_results.append(result)
+                    seen_sponsors.add(result["Sponsor"])
+
+                if len(deduplicated_results) >= 3:  # Limit to top 3
+                    break
+
+            return deduplicated_results
+
+        except ConnectionFailure:
+            print("Failed to connect to MongoDB")
+            return []
+
+# Initialize SloganRecommender
+slogan_recommender = SloganRecommender(
+    mongo_uri="mongodb://localhost:27017/",
+    mongo_db="athlete_sponsorships",
+    collection_name="sponsor_identity",
+    athlete_collection="athletes"
+)
+
+@app.route('/explore-data/slogan-similarity', methods=['GET', 'POST'])
+def slogan_similarity():
+    if request.method == 'POST':
+        user_input = request.form['words']
+        results = slogan_recommender.find_most_similar_slogans(user_input)
+
+        # Pass results to the template for display
+        return render_template('slogan_results.html', results=results)
+    
+    return render_template('slogan_similarity.html')  # GET request, show the form
 
 # MongoDB initialization for sponsor recommendation
 recommender = SponsorRecommender(mongo_uri="mongodb://localhost:27017/",
@@ -26,9 +86,9 @@ def search_athlete(athlete_name):
     else:
         return "Athlete not found!"
 
-# Function to search athletes by name for autocomplete (case-insensitive)
+# Function to search athletes by name for autocomplete 
 def search_athletes_by_name(query):
-    query = f"%{query.lower()}%"  # Convert query to lowercase and add wildcards for LIKE search
+    query = f"%{query.lower()}%"  
     rows = cassandra_session.execute("SELECT athlete_name FROM athletes WHERE athlete_name LIKE %s LIMIT 10", (query,))
     return [row.athlete_name for row in rows]
 
