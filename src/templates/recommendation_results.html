@@ -5,73 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sponsor Recommendations</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: #000;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-
-        h1 {
-            margin-top: 50px;
-            font-size: 3rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            background: #222;
-            margin: 15px auto;
-            padding: 15px;
-            border-radius: 10px;
-            max-width: 600px;
-            text-align: left;
-        }
-
-        li strong {
-            color: #f5a623;
-        }
-
-        a {
-            color: #f5a623;
-            text-decoration: none;
-            font-size: 1.2rem;
-        }
-
-        a:hover {
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="../static/styles.css"> <!-- Link to external CSS -->
+    <script src="../static/js/cursor.js" defer></script> <!-- Custom cursor JS -->
 </head>
 <body>
-    <h1>Recommended Sponsors</h1>
+    <!-- Add custom cursor element -->
+    <div class="custom-cursor"></div>
 
-    <!-- Check if recommendations are available -->
-    {% if recommendations %}
-        <ul>
-        {% for recommendation in recommendations %}
-            <li>
-                <strong>Sponsor:</strong> {{ recommendation['Sponsor'] }} <br>
-                <strong>Score:</strong> {{ recommendation['Score'] }} <br>
-                <strong>Top Matches:</strong> {{ recommendation['Top Matches'] }} <br>
-                <strong>Similar Athletes:</strong> {{ recommendation['Similar Athletes'] }}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No recommendations found. Please try again with different values.</p>
-    {% endif %}
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <a href="/"><img src="logo.png" alt="Logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="cv.html">CV</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <!-- Link back to the form to try again -->
-    <br>
-    <a href="/sponsor_recommendation">Go back to the recommendation form</a>
+    <!-- Main Content -->
+    <main>
+        <h1>These are the sponsors we think might suit your athlete.</h1>
+
+        <!-- Check if recommendations are available -->
+        {% if recommendations %}
+            <ul class="recommendations-list">
+                {% for recommendation in recommendations %}
+                    <li class="recommendation-item">
+                        <strong class="sponsor-highlight">Sponsor:{{ recommendation['Sponsor'] }} <br></strong> 
+                        <strong>Score:</strong> {{ recommendation['Score']|round(2) }} <br>
+                        
+                        <strong>Top Matches:</strong>
+                        <ul class="recommendation-item-list">
+                            <li><strong>Nouns:</strong> 
+                                {% for noun in recommendation['Top Matches']['Nouns'] %}
+                                    <span>{{ noun[0] }} ({{ noun[1] }}) - {{ noun[2]|round(2) }}</span><br>
+                                {% endfor %}
+                            </li>
+                            <li><strong>Adjectives:</strong> 
+                                {% for adj in recommendation['Top Matches']['Adjectives'] %}
+                                    <span>{{ adj[0] }} ({{ adj[1] }}) - {{ adj[2]|round(2) }}</span><br>
+                                {% endfor %}
+                            </li>
+                            <li><strong>Values:</strong> 
+                                {% for value in recommendation['Top Matches']['Values'] %}
+                                    <span>{{ value[0] }} ({{ value[1] }}) - {{ value[2]|round(2) }}</span><br>
+                                {% endfor %}
+                            </li>
+                            <li><strong>Nationality:</strong> 
+                                {% for nationality in recommendation['Top Matches']['Nationality'] %}
+                                    <span>{{ nationality[0] }} ({{ nationality[1] }}) - {{ nationality[2]|round(2) }}</span><br>
+                                {% endfor %}
+                            </li>
+                        </ul>
+                        
+                        <strong>Similar Athletes:</strong> 
+                        <ul class="recommendation-item-list">
+                            {% for athlete in recommendation['Similar Athletes'] %}
+                                <li>{{ athlete }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+            
+            
+        {% else %}
+            <p>No recommendations found. Please try again with different values.</p>
+        {% endif %}
+
+        <!-- Link back to the form to try again -->
+        <br>
+        <a href="/sponsor_recommendation" class="button">Go back to the recommendation form</a>
+    </main>
 </body>
 </html>

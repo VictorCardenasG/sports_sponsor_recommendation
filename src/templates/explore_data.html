@@ -4,30 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore Data</title>
-    <style>
-        body { background-color: #333; color: white; font-family: Arial, sans-serif; }
-        .container { width: 80%; margin: 0 auto; padding: 2rem; }
-        h1 { text-align: center; }
-        .options { display: flex; justify-content: space-around; margin-top: 2rem; }
-        .option { background-color: #444; padding: 1.5rem; border-radius: 10px; width: 40%; text-align: center; cursor: pointer; }
-        .option:hover { background-color: #555; }
-        a { text-decoration: none; color: white; font-size: 1.2rem; }
-    </style>
+    <link rel="stylesheet" href="../static/styles.css">
+    <script src="../static/js/cursor.js" defer></script>
 </head>
 <body>
-    <div class="container">
+    <!-- Add custom cursor element -->
+    <div class="custom-cursor"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="cv.html">CV</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="welcome-section">
         <h1>Explore Data</h1>
         <p>Select an option to continue:</p>
         <div class="options">
-            <div class="option">
-                <a href="/values-popularity">Values Count</a>
-            </div>
-            <div class="option">
-                <a href="/explore-data/athlete-search">Athlete Search</a>
-            </div>
-            <div class="option">
-                <a href="/explore-data/slogan-similarity">Slogan Similarity</a>
-            </div>
+            <a href="/values-popularity" class="button">Values Count</a>
+            <a href="/explore-data/athlete-search" class="button">Athlete Search</a>
+            <a href="/explore-data/slogan-similarity" class="button">Slogan Similarity</a>
         </div>
     </div>
 </body>

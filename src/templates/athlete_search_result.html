@@ -4,36 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Athlete Search Results</title>
-    <style>
-        body { background-color: #333; color: white; font-family: Arial, sans-serif; }
-        .container { width: 80%; margin: 0 auto; padding: 2rem; }
-        h1 { text-align: center; }
-        .athlete-details { margin-top: 2rem; }
-        .athlete-details p { margin: 0.5rem 0; }
-    </style>
+    <link rel="stylesheet" href="../static/styles.css"> <!-- Corrected link to styles.css -->
+    <script src="../static/js/cursor.js" defer></script> <!-- Corrected link to cursor.js -->
 </head>
-<body>
+<body class="body">
+
+    <!-- Custom cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <a href="/"><img src="logo.png" alt="Logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="cv.html">CV</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- Title outside container but close to it -->
+    <h1 class="title">This is your athlete's information.</h1>
     <div class="container">
-        <h1>Athlete Search Results</h1>
         {% if result == "Athlete not found!" %}
-            <p>{{ result }}</p>
+            <p class="text-white">{{ result }}</p>
         {% else %}
             <div class="athlete-details">
-                <p><strong>Athlete Name:</strong> {{ result.athlete_name }}</p>
-                <p><strong>Values:</strong> {{ result.values }}</p>
-                <p><strong>Nouns:</strong> {{ result.nouns }}</p>
-                <p><strong>Adjectives:</strong> {{ result.adjectives }}</p>
-                <p><strong>Sponsor:</strong> {{ result.sponsor }}</p>
-                <p><strong>IG Followers:</strong> {{ result.ig_followers }}</p>
-                <p><strong>Practiced Sport:</strong> {{ result.practiced_sport }}</p>
-                <p><strong>Nationality:</strong> {{ result.nationality }}</p>
-                <p><strong>Core Audience:</strong> {{ result.core_audience }}</p>
-                <p><strong>Net Worth:</strong> {{ result.net_worth }}</p>
-                <p><strong>Age:</strong> {{ result.age }}</p>
-                <p><strong>Agent:</strong> {{ result.agent }}</p>
-                <p><strong>Sports Sponsors:</strong> {{ result.sports_sponsors }}</p>
+                <p class="athlete-info"><span class="highlight">Athlete's Name:</span> <span class="text-white">{{ result.athlete_name }}</span></p>
+                <p class="athlete-info"><span class="highlight">Values:</span> <span class="text-white">{{ result.values }}</span></p>
+                <p class="athlete-info"><span class="highlight">Nouns:</span> <span class="text-white">{{ result.nouns }}</span></p>
+                <p class="athlete-info"><span class="highlight">Adjectives:</span> <span class="text-white">{{ result.adjectives }}</span></p>
+                <p class="athlete-info"><span class="highlight">Sponsor:</span> <span>{{ result.sponsor }}</span></p>
+                <p class="athlete-info"><span class="highlight">IG Followers:</span> <span class="text-white">{{ result.ig_followers }}</span></p>
+                <p class="athlete-info"><span class="highlight">Practiced Sport:</span> <span class="text-white">{{ result.practiced_sport }}</span></p>
+                <p class="athlete-info"><span class="highlight">Nationality:</span> <span class="text-white">{{ result.nationality }}</span></p>
+                <p class="athlete-info"><span class="highlight">Core Audience:</span> <span class="text-white">{{ result.core_audience }}</span></p>
+                <p class="athlete-info"><span class="highlight">Net Worth:</span> <span class="text-white">{{ result.net_worth }}</span></p>
+                <p class="athlete-info"><span class="highlight">Age:</span> <span class="text-white">{{ result.age }}</span></p>
+                <p class="athlete-info"><span class="highlight">Agent:</span> <span class="text-white">{{ result.agent }}</span></p>
+                <p class="athlete-info"><span class="highlight">Sports Sponsors:</span> <span class="text-white">{{ result.sports_sponsors }}</span></p>
             </div>
         {% endif %}
     </div>
+
 </body>
 </html>

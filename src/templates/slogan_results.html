@@ -3,30 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slogan Results</title>
-    <style>
-        body { background-color: #333; color: white; font-family: Arial, sans-serif; }
-        .container { width: 80%; margin: 0 auto; padding: 2rem; }
-        h1 { text-align: center; }
-        .results { margin-top: 2rem; }
-        .result { background-color: #444; padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem; }
-    </style>
+    <title>Sponsor Recommendation Form</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <script src="../static/js/cursor.js" defer></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Top 3 Similar Slogans</h1>
-        <div class="results">
+    <!-- Add custom cursor element -->
+    <div class="custom-cursor"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <a href="/"><img src="logo.png" alt="Logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="cv.html">CV</a></li>
+            </ul>
+        </nav>
+    </header>
+<body>
+    <main>
+        <ul class="recommendations-list">
             {% for result in results %}
-            <div class="result">
-                <h2>{{ result['Sponsor'] }}</h2>
-                <p><strong>Slogan:</strong> {{ result['Slogan'] }}</p>
-                <p><strong>Score:</strong> {{ result['Score'] }}</p>
-            </div>
+                <li class="recommendation-item">
+                    <strong class="sponsor-highlight">Sponsor: {{ result['Sponsor'] }}</strong><br>
+                    <strong>Slogan:</strong> {{ result['Slogan'] }}<br>
+                    <strong>Score:</strong> {{ result['Score']|round(2) }}
+                </li>
             {% endfor %}
-        </div>
+        </ul>
         <div class="back-link">
-            <a href="/explore-data/slogan-similarity">Back to Search</a>
+            <a href="/explore-data/slogan-similarity" class="button">Back to Search</a>
         </div>
-    </div>
+    </main>
 </body>
 </html>

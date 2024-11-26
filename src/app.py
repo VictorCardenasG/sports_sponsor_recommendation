@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, jsonify, redirect, url_for, request, render_template
 from cassandra.cluster import Cluster
 from sdb_sponsor_recommendation import SponsorRecommender
 from pymongo import MongoClient
@@ -220,19 +220,20 @@ def autocomplete_athlete():
 @app.route('/values-popularity', methods=['GET', 'POST'])
 def values_popularity():
     if request.method == 'POST':
-        user_input = request.form.get('value') 
+        user_input = request.form.get('value')
         query = "SELECT count FROM values_count WHERE value = %s"
         rows = cassandra_session.execute(query, [user_input])
-        
-        # Check if the value exists and fetch count
         count = rows.one()
-        if count:
-            count_result = count.count
-        else:
-            count_result = 0  # If value does not exist, return 0
-        
-        return render_template('values_popularity.html', count=count_result, value=user_input)
-    return render_template('values_popularity.html', count=None)
+        count_result = count.count if count else 0
+        # Redirect to the result page
+        return redirect(url_for('values_count_result', value=user_input, count=count_result))
+    return render_template('values_popularity.html')
+
+@app.route('/values-count-result')
+def values_count_result():
+    value = request.args.get('value', '')
+    count = request.args.get('count', 0)
+    return render_template('values_count_result.html', value=value, count=count)
 
 
 if __name__ == '__main__':

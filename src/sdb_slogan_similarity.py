@@ -3,8 +3,8 @@ from pymongo.errors import ConnectionFailure
 
 # Connect to MongoDB
 client = MongoClient('mongodb://localhost:27017/')
-db = client['athlete_sponsorships']  
-collection = db['sponsor_identity']  
+db = client['athlete_sponsorships']
+collection = db['sponsor_identity']
 
 class SloganRecommender:
 
@@ -45,10 +45,10 @@ class SloganRecommender:
             return []
 
 
-# Example usage
-user_input = "motivation inspiration performance"
-results = find_most_similar_slogans(user_input)
-for result in results:
-    print(f"Sponsor: {result['Sponsor']}, Score: {round(result['score'],2)}")
+# # Example usage
+# user_input = "motivation inspiration performance"
+# results = find_most_similar_slogans(user_input)
+# for result in results:
+#     print(f"Sponsor: {result['Sponsor']}, Score: {round(result['score'],2)}")
 
 

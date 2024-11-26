@@ -1,11 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Values Count Result</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <script src="../static/js/cursor.js" defer></script>
 </head>
+
 <body>
-    <h1>Values Count Result</h1>
-    <p>The value "<strong>{{ value }}</strong>" appears <strong>{{ count }}</strong> times in the dataset.</p>
-    <a href="/values-count">Check another value</a>
+    <!-- Add custom cursor element -->
+    <div class="custom-cursor"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <a href="/"><img src="logo.png" alt="Logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="cv.html">CV</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Values Count Result</h1>
+        <p>The value "<strong>{{ value }}</strong>" appears <strong>{{ count }}</strong> times in the dataset.</p>
+        <a href="/values-popularity" class="button">Check another value</a>
+    </main>
 </body>
 </html>
+
